@@ -1,0 +1,51 @@
+---
+- name: Remove conflicting Docker packages
+  become: true
+  apt:
+    name: "{{ docker_uninstall }}"
+    state: absent
+    purge: true
+  ignore_errors: true
+
+- name: Install dependencies
+  become: true
+  apt:
+    update_cache: yes
+    name: "{{ install_deps }}"
+    state: present
+
+- name: Download Docker's official GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "a+r"
+
+- name: Add the Docker repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+    state: present
+    update_cache: yes
+
+- name: Install Docker
+  become: true
+  apt:
+    update_cache: yes
+    name: "{{ docker_install }}"
+    state: present
+
+- name: Add the Deployment Administrator to the Docker group
+  become: true
+  ansible.builtin.user:
+    name: "{{ user }}"
+    groups: docker
+    append: yes
+
+- name: Chown the Docker socket to the Deployment Administrator
+  become: true
+  file:
+    path: /var/run/docker.sock
+    owner: "{{ user }}"
+    group: docker
+    state: file

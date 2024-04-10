@@ -1,0 +1,119 @@
+services:
+  nginx:
+    init: true
+    container_name: nginx
+    build: nginx
+    depends_on:
+      - wordpress
+      - phpmyadmin
+    ports:
+      - "443:443"
+    networks:
+      - wordpress
+    volumes:
+      - wp-volume:/var/www/html
+    restart: always
+
+  mariadb:
+    init: true
+    container_name: mariadb
+    build: 
+      context: mariadb
+      args:
+        DATABASE_NAME: ${DATABASE_NAME}
+        DATABASE_USER: ${DATABASE_USER}
+        DATABASE_PW: ${DATABASE_PW}
+        DATABASE_ROOT_PW: ${DATABASE_ROOT_PW}
+    networks:
+      - wordpress
+    volumes:
+      - db-volume:/var/lib/mysql/${DATABASE_NAME}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 0s
+      retries: 5
+    restart: always
+
+  wordpress:
+    init: true
+    container_name: wordpress
+    build: wordpress
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PW=${DATABASE_PW}
+      - WP_URL=${DOMAIN_NAME}
+      - WP_SITE_TITLE=${WP_SITE_TITLE}
+      - WP_ADMIN_USER=${WP_ADMIN_USER}
+      - WP_ADMIN_PW=${WP_ADMIN_PW}
+      - WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - wordpress
+    volumes:
+      - wp-volume:/var/www/html
+    restart: always
+
+  redis:
+    init: true
+    container_name: redis
+    build: redis
+    networks:
+      - wordpress
+    volumes:
+      - wp-volume:/var/www/html
+    restart: always
+
+  portainer:
+    init: true
+    container_name: portainer
+    build: portainer
+    networks:
+      - wordpress
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+    networks:
+      - wordpress
+    restart: always
+
+  portfolio:
+    init: true
+    container_name: portfolio
+    build: portfolio
+    ports:
+      - "80:80"
+    networks:
+      - portfolio
+    restart: always
+
+volumes:
+  wp-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/lsimanic/data/wordpress
+
+  db-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/lsimanic/data/mariadb
+
+  portainer_data:
+
+networks:
+  wordpress:
+  portfolio:

@@ -1,0 +1,31 @@
+---
+- name: Stop the Webapp
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    state: absent
+    remove_volumes: yes
+    remove_orphans: yes
+
+- name: Clean all Docker unused containers, networks, and images
+  community.docker.docker_prune:
+    containers: yes
+    networks: yes
+    images: yes
+    volumes: yes
+  ignore_errors: yes
+
+- name: Delete WordPress and MariaDB folders
+  become: yes
+  become_user: root
+  ansible.builtin.file:
+    path: "{{ data }}{{ item }}"
+    state: absent
+  loop:
+    - wordpress
+    - mariadb
+
+- name: Remove cron job for Docker Compose on reboot
+  ansible.builtin.cron:
+    name: "Start Docker Compose on Reboot"
+    user: "{{ user }}"
+    state: absent

@@ -1,0 +1,106 @@
+---
+- name: Provision EC2 Instance
+  hosts: localhost
+  gather_facts: no
+  tags: aws
+  roles:
+    - role: aws
+  vars_files:
+    - vault/encrypted_credentials.yml
+
+- name: Setup a separate user for deployment tasks
+  hosts: webserver
+  gather_facts: no
+  tags: user_setup
+  become: yes
+  vars:
+    ansible_user: ubuntu
+  roles:
+    - role: user_setup
+
+- name: Deploy Docker to EC2 Instance
+  hosts: webserver
+  tags: docker
+  become: yes
+  roles:
+    - role: docker
+
+- name: Copy Webapp files to EC2 Instance
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: webapp
+  vars:
+    cmd: copy
+  roles:
+    - role: webapp
+
+- name: Deploy MariaDB
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: mariadb
+  vars:
+    cmd: start
+  roles:
+    - role: mariadb
+
+- name: Deploy WordPress
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: wordpress
+  vars:
+    cmd: start
+  roles:
+    - role: wordpress
+
+- name: Deploy Nginx
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: nginx
+  vars:
+    cmd: start
+  roles:
+    - role: nginx
+
+- name: Deploy phpMyAdmin
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: phpmyadmin
+  vars:
+    cmd: start
+  roles:
+    - role: phpmyadmin
+
+- name: Deploy Redis
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: redis
+  vars:
+    cmd: start
+  roles:
+    - role: redis
+
+- name: Deploy Portainer
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: portainer
+  vars:
+    cmd: start
+  roles:
+    - role: portainer
+
+- name: Deploy Portfolio
+  hosts: webserver
+  become: yes
+  become_user: lsimanic
+  tags: portfolio
+  vars:
+    cmd: start
+  roles:
+    - role: portfolio

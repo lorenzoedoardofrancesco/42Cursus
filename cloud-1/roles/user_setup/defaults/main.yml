@@ -1,0 +1,4 @@
+---
+user_comment: Deployment Administrator
+user_shell: /bin/bash
+public_key: "{{ lookup('file', '~/.ssh/' + key_name + '.pub') }}"

@@ -1,0 +1,34 @@
+---
+- name: Build Redis
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - redis
+    state: stopped
+    build: always
+  when: cmd == 'build'
+
+- name: Start Redis
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - redis
+    state: present
+    build: always
+  when: cmd == 'start'
+
+- name: Stop Redis
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - redis
+    state: stopped
+  when: cmd == 'stop'
+
+- name: Restart Redis
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - redis
+    state: restarted
+  when: cmd == 'restart'

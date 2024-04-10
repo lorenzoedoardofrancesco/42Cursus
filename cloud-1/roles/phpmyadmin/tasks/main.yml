@@ -1,0 +1,34 @@
+---
+- name: Build phpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - phpmyadmin
+    state: stopped
+    build: always
+  when: cmd == 'build'
+
+- name: Start phpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - phpmyadmin
+    state: present
+    build: always
+  when: cmd == 'start'
+
+- name: Stop phpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - phpmyadmin
+    state: stopped
+  when: cmd == 'stop'
+
+- name: Restart phpMyAdmin
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - phpmyadmin
+    state: restarted
+  when: cmd == 'restart'
