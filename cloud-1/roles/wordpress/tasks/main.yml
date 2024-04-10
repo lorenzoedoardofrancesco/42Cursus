@@ -1,0 +1,34 @@
+---
+- name: Build WordPress
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - wordpress
+    state: stopped
+    build: always
+  when: cmd == 'build'
+
+- name: Start WordPress
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - wordpress
+    state: present
+    build: always
+  when: cmd == 'start'
+
+- name: Stop WordPress
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - wordpress
+    state: stopped
+  when: cmd == 'stop'
+
+- name: Restart WordPress
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - wordpress
+    state: restarted
+  when: cmd == 'restart'

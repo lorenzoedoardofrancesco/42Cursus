@@ -1,0 +1,17 @@
+---
+- name: Create Webapp startup script
+  ansible.builtin.copy:
+    dest: "/home/{{ user }}/inception/start_webapp.sh"
+    content: |
+      #!/bin/bash
+      cd /home/{{ user }}/inception && docker compose up -d
+    mode: "0755"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Setup cron job for Webapp startup on reboot
+  ansible.builtin.cron:
+    name: "Start webapp on reboot"
+    special_time: reboot
+    job: "/home/{{ user }}/inception/start_webapp.sh"
+    user: "{{ user }}"

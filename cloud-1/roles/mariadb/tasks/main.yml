@@ -1,0 +1,34 @@
+---
+- name: Build Mariadb
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - mariadb
+    state: stopped
+    build: always
+  when: cmd == 'build'
+
+- name: Start Mariadb
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - mariadb
+    state: present
+    build: always
+  when: cmd == 'start'
+
+- name: Stop Mariadb
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - mariadb
+    state: stopped
+  when: cmd == 'stop'
+
+- name: Restart Mariadb
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - mariadb
+    state: restarted
+  when: cmd == 'restart'

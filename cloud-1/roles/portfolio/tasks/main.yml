@@ -1,0 +1,34 @@
+---
+- name: Build Portfolio
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - portfolio
+    state: stopped
+    build: always
+  when: cmd == 'build'
+
+- name: Start Portfolio
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - portfolio
+    state: present
+    build: always
+  when: cmd == 'start'
+
+- name: Stop Portfolio
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - portfolio
+    state: stopped
+  when: cmd == 'stop'
+
+- name: Restart Portfolio
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception }}"
+    services:
+      - portfolio
+    state: restarted
+  when: cmd == 'restart'

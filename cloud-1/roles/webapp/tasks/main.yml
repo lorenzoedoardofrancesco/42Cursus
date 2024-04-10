@@ -1,0 +1,16 @@
+---
+- include_tasks: main/copy_files.yml
+
+- include_tasks: main/cron_job.yml
+
+- include_tasks: main/start.yml
+  when: cmd == 'start'
+
+- include_tasks: main/reset.yml
+  when: cmd == 'reset'
+
+- include_tasks: main/stop.yml
+  when: cmd == 'stop'
+
+- include_tasks: main/restart.yml
+  when: cmd == 'restart'

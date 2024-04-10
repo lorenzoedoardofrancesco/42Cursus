@@ -1,0 +1,126 @@
+---
+- name: Verify SSH Key exists or create it
+  ansible.builtin.command:
+    cmd: >
+      ssh-keygen -t rsa -b 4096 -f "~/.ssh/{{ key_name }}" -N "" -C "AWS EC2 Key"
+    creates: "~/.ssh/{{ key_name }}"
+  register: ssh_key_result
+  changed_when: "ssh_key_result.stdout != ''"
+
+- name: Set permissions for the SSH Key
+  ansible.builtin.file:
+    path: "~/.ssh/{{ key_name }}"
+    mode: '0400'
+  when: ssh_key_result.changed
+
+- name: Read SSH Public Key
+  ansible.builtin.slurp:
+    src: "~/.ssh/{{ key_name }}.pub"
+  register: ssh_public_key_content
+  when: ssh_key_result.changed
+
+- name: Add SSH Key to AWS
+  amazon.aws.ec2_key:
+    name: "{{ key_name }}"
+    key_material: "{{ ssh_public_key_content['content'] | b64decode }}"
+    region: "{{ region }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+  when: ssh_key_result.changed
+
+- name: Gather information about all Ubuntu 22.04 LTS AMIs
+  amazon.aws.ec2_ami_info:
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    region: "{{ region }}"
+    filters:
+      name: "{{ ubuntu_ami_name }}"
+      architecture: x86_64
+      root-device-type: ebs
+      virtualization-type: hvm
+  register: ami_info
+
+- name: Find the latest Ubuntu 22.04 LTS AMI
+  set_fact:
+    latest_ami: "{{ ami_info.images | sort(attribute='creation_date', reverse=true) | first }}"
+
+- debug:
+    msg: "The latest Ubuntu 22.04 LTS AMI ID is {{ latest_ami.image_id }}"
+
+- name: Obtain current public IP
+  ansible.builtin.shell: curl https://ipinfo.io/ip
+  register: my_public_ip
+
+- name: Create security group
+  amazon.aws.ec2_security_group:
+    name: "{{ security_group }}"
+    description: "Allow SSH, HTTP and HTTPS"
+    region: "{{ region }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    rules:
+      - proto: tcp
+        ports: [22]
+        cidr_ip: "{{ my_public_ip.stdout }}/32"
+        rule_desc: Allow SSH from known IP
+      - proto: tcp
+        ports: [80, 443]
+        cidr_ip: 0.0.0.0/0
+        rule_desc: Allow HTTP and HTTPS from anywhere
+
+- name: Launch an EC2 Instance with public IP address
+  amazon.aws.ec2_instance:
+    name: "{{ id }}"
+    key_name: "{{ key_name }}"
+    instance_type: "{{ instance_type }}"
+    security_group: "{{ security_group }}"
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    region: "{{ region }}"
+    network:
+      assign_public_ip: true
+    image_id: "{{ latest_ami.image_id }}"
+
+- name: Wait for the EC2 Instance to boot
+  amazon.aws.ec2_instance_info:
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    region: "{{ region }}"
+    filters:
+      "tag:Name": "{{ id }}"
+  register: ec2_info
+  until: >-
+    ec2_info.instances is defined and
+    ec2_info.instances | selectattr('state.name', 'equalto', 'running') | map(attribute='public_ip_address') | select | list | count > 0
+  retries: 10
+  delay: 30
+
+- name: Get the public IP address of the running EC2 Instance
+  set_fact:
+    ec2_public_ip: "{{ (ec2_info.instances | selectattr('state.name', 'equalto', 'running') | selectattr('public_ip_address', 'defined') | list | first).public_ip_address }}"
+  when: ec2_info.instances | selectattr('state.name', 'equalto', 'running') | selectattr('public_ip_address', 'defined') | list | count > 0
+
+- debug:
+    msg: "The public IP address of the EC2 Instance is {{ ec2_public_ip }}"
+
+- name: Add new EC2 Instance to the dynamic inventory
+  add_host:
+    name: "{{ ec2_public_ip }}"
+    groups: webserver
+    ansible_ssh_private_key_file: "~/.ssh/{{ key_name }}"
+    ansible_user: "{{ user}}"
+
+- name: Add new EC2 Instance to the inventory
+  lineinfile:
+    path: "{{ inventory_file_path }}"
+    regexp: '^{{ ec2_public_ip }} '
+    line: "{{ ec2_public_ip }} ansible_ssh_private_key_file=~/.ssh/{{ key_name }}"
+    create: no
+  run_once: true
+
+- name: Wait for SSH to become available
+  ansible.builtin.wait_for:
+    host: "{{ ec2_public_ip }}"
+    port: 22
+    state: started
+    timeout: 300

@@ -1,0 +1,31 @@
+---
+- name: Add a user for deployment tasks
+  user:
+    name: "{{ user }}"
+    comment: "{{ user_comment }}"
+    shell: "{{ user_shell }}"
+    create_home: yes
+    state: present
+
+- name: Create a folder for ssh
+  file:
+    path: "/home/{{ user }}/.ssh/"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+    state: directory
+
+- name: Create authorized_keys file with user's public key
+  lineinfile:
+    dest: "/home/{{ user }}/.ssh/authorized_keys"
+    line: "{{ public_key }}"
+    state: present
+    create: yes
+
+- name: Create sudoers file for user
+  ansible.builtin.template:
+    src: ansible_sudoers.j2
+    dest: "/etc/sudoers.d/{{ user }}"
+    owner: root
+    group: root
+    mode: "0440"

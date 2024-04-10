@@ -1,0 +1,41 @@
+---
+- name: Create directory for Inception
+  become: yes
+  become_user: root
+  ansible.builtin.file:
+    path: "/home/{{ user }}/inception"
+    owner: "{{ user }}"
+    state: directory
+
+- name: Synchronize source files to remote server
+  ansible.builtin.synchronize:
+    src: ./files/inception
+    dest: "/home/{{ user }}/"
+    recursive: yes
+
+- name: Check if MariaDB and WordPress directories exist
+  ansible.builtin.stat:
+    path: "/home/{{ user }}/data/{{ item }}"
+  loop:
+    - mariadb
+    - wordpress
+  register: dir_stat
+
+- name: Ensure the MariaDB and WordPress directories exist
+  become: yes
+  ansible.builtin.file:
+    path: "/home/{{ user }}/data/{{ item.item }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: "0755"
+  loop: "{{ dir_stat.results }}"
+  when: not item.stat.exists
+
+- name: Decrypt and transfer the .env file to the remote server
+  ansible.builtin.copy:
+    src: roles/webapp/files/.env
+    dest: "/home/{{ user }}/inception/.env"
+    decrypt: yes
+    mode: "0644"
+  become: yes

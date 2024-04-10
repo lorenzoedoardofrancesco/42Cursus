@@ -1,0 +1,4 @@
+---
+user: lsimanic
+key_name: aws-ec2-key
+inception: "/home/{{ user }}/inception/"
