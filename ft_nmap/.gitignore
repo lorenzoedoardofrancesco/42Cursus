@@ -1,0 +1,11 @@
+.vagrant
+objs
+ft_nmap
+*VBox*.log
+*.pcap*
+.clangd
+nmap-service-probes
+try*
+output/
+.nm_output
+scripts/allowed.txt
