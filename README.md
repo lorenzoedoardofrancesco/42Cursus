@@ -57,7 +57,7 @@
 | [**rainfall**](https://github.com/lorenzoedoardofrancesco/42Cursus/tree/main/RainFall) | C · Buffer-overflow exploits | <a href="https://projects.intra.42.fr/projects/42cursus-rainfall/projects_users/3360930"><img src=".images/125.svg" width="120"/></a> | ⭐⭐ | 16 Oct 2023 |
 | [**override**](https://github.com/lorenzoedoardofrancesco/42Cursus/tree/main/OverRide) | C · Stack-overflow & ROP | <a href="https://projects.intra.42.fr/projects/42cursus-override/projects_users/3399932"><img src=".images/125.svg" width="120"/></a> | ⭐⭐ | 11 Nov 2023 |
 | [**boot2root**](https://github.com/lorenzoedoardofrancesco/42Cursus/tree/main/boot2root) | Linux · VM exploitation | <a href="https://projects.intra.42.fr/projects/42cursus-boot2root/projects_users/3426590"><img src=".images/125.svg" width="120"/></a> | ⭐ | 14 Dec 2023 |
-| [**tinky-winkey**](https://github.com/lorenzoedoardofrancesco/42Cursus/tree/main/tinky-winkey) | Windows · Service & keylogger | *pending eval* | *pending eval* | — |
+| [**tinky-winkey**](https://github.com/lorenzoedoardofrancesco/42Cursus/tree/main/tinky-winkey) | Windows · Service & keylogger | <a href="https://projects.intra.42.fr/projects/tinky-winkey/projects_users/4332056"><img src=".images/125.svg" width="120"/></a> | ⭐⭐ | 09 Jan 2026 |
 
 ## 🧩 Kernel & Rust
 
@@ -96,6 +96,7 @@
 
 # 💼 Work Experience
 
-| Position                             | Company | Score             | Dates             |
-| :----------------------------------- | :------ | :---------------- | :---------------- |
-| Software Engineer (Internship & CDI) | Bobst   | <img src=".images/125.svg" width="120"/> | Sep 2024 – present |
+| Project | Company | Role | Score | Dates |
+| :--- | :--- | :--- | :---: | :--- |
+| **Work Experience I**  | [**Bobst**](https://www.bobst.com) | Software Engineer · Internship | <a href="https://projects.intra.42.fr/projects/work-experience-i/projects_users/3858902"><img src=".images/125.svg" width="120"/></a>  | Sep 2024 – Feb 2025 |
+| **Work Experience II** | [**Bobst**](https://www.bobst.com) | Software Engineer · Full-time  | <a href="https://projects.intra.42.fr/projects/work-experience-ii/projects_users/4504746"><img src=".images/125.svg" width="120"/></a> | Mar 2025 – Present  |
