@@ -2,7 +2,7 @@
 
 ## Project Description
 
-SnowCrash is an introductory project on computer security, designed to acquaint developers with security across various sub-domains. Emphasizing a developer-oriented approach, the project guides participants through an exploration of multiple programming languages (ASM, Perl, PHP, etc.), fostering the development of a keen logic for understanding unfamiliar programs. Through hands-on experience, Snow Crash aims to illuminate the critical importance of meticulous programming practices and the far-reaching implications of seemingly minor coding errors in software development.
+The *SnowCrash* project is an introductory challenge on computer security, designed to acquaint developers with security across various sub-domains. Emphasizing a developer-oriented approach, the project guides participants through an exploration of multiple programming languages (ASM, Perl, PHP, etc.), fostering the development of a keen logic for understanding unfamiliar programs. Through hands-on experience, SnowCrash aims to illuminate the critical importance of meticulous programming practices and the far-reaching implications of seemingly minor coding errors in software development. You can find the project description in the [PDF available in this repository](https://github.com/lorenzoedoardofrancesco/42Cursus/raw/main/SnowCrash/Snowcrash_subject.pdf).
 
 This repository hosts comprehensive guides and solutions for each level of the SnowCrash project, designed to enhance understanding and practical application of computer security principles.
 

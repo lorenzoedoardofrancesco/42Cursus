@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The **BADASS (Bgp At Doors of Autonomous Systems is Simple)** project aims to deepen the knowledge acquired through NetPractice by simulating several networks (VXLAN+BGP-EVPN) in **GNS3**.
+The *BADASS (BGP At Doors of Autonomous Systems is Simple)* project aims to deepen the knowledge acquired through NetPractice by simulating several networks (VXLAN and BGP-EVPN) in **GNS3**. Through hands-on configuration of virtual network topologies, this project covers static and dynamic VXLAN setups, multicast distribution, and BGP EVPN with route reflection. You can find the project description in the [PDF available in this repository](https://github.com/lorenzoedoardofrancesco/42Cursus/raw/main/BADASS/BADASS.pdf).
 
 #### Understanding BGP EVPN
 

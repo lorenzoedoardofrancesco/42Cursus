@@ -7,6 +7,8 @@ Unlike nmap, **ft_nmap** emphasizes **speed** and **multithreading**, handling h
 
 ## Project Description
 
+You can find the project description in the [PDF available in this repository](https://github.com/lorenzoedoardofrancesco/42Cursus/raw/main/ft_nmap/ft_nmap.pdf).
+
 ### Mandatory Features
 
 - Supports IPv4 addresses and hostnames (FQDN — no DNS resolution)

@@ -2,7 +2,7 @@
 
 ## Project Description
 
-boot2root is a practical project designed to immerse participants in the world of computer security through engaging challenges. It aims to teach on how to gain root access on a server using various techniques, from simple to complex. The project leverages a provided ISO to simulate real-world security scenarios, enhancing participants' technical skills and security awareness.
+The *boot2root* project is a practical challenge designed to immerse participants in the world of computer security. The goal is to gain root access on a server using various techniques, from simple to complex. The project leverages a provided ISO to simulate real-world security scenarios, enhancing participants' technical skills and security awareness. You can find the project description in the [PDF available in this repository](https://github.com/lorenzoedoardofrancesco/42Cursus/raw/main/boot2root/boot2root.pdf).
 
 This repository provides guides and solutions for the boot2root project, aimed at enhancing skills in achieving server root access through diverse security techniques.
 

@@ -2,7 +2,7 @@
 
 ## Project Description
 
-RainFall is a project centered around cybersecurity, focusing on binary exploitation techniques in i386 systems. It provides a hands-on experience for programmers to explore and understand system vulnerabilities, highlighting the significance of secure coding practices in software development.
+The *RainFall* project is centered around cybersecurity, focusing on binary exploitation techniques in i386 systems. It provides a hands-on experience for programmers to explore and understand system vulnerabilities, highlighting the significance of secure coding practices in software development. You can find the project description in the [PDF available in this repository](https://github.com/lorenzoedoardofrancesco/42Cursus/raw/main/RainFall/RainFall_subject.pdf).
 
 This repository contains detailed walkthroughs and solutions for the RainFall project, tailored to deepen the practical skills and theoretical knowledge of cybersecurity enthusiasts in the area of binary exploitation.
 
