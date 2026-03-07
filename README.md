@@ -12,7 +12,7 @@
 # 📈 42 Progress Overview
 
 <p align="center">
-<a href="https://42badge.vercel.app"><img src="https://42badge.vercel.app/api/v2/cmmdrgqgb0000lmzlzuxh3798/stats?cursusId=21&coalitionId=48" alt="lsimanic's 42 stats" /></a>
+<a href="https://42badge.vercel.app"><img src="https://42badge.vercel.app/api/v2/cmmdrgqgb0000lmzlzuxh3798/stats?cursusId=21&coalitionId=carbon" alt="lsimanic's 42 stats" /></a>
 </p>
 
 ---
